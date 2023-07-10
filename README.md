@@ -389,5 +389,5 @@ This command will trigger the execution of the unit tests for the mentioned clas
 
 ## Acknowledgements
 
- - [Spring Boot Tutorials By Chad Darby](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
+ - [Spring Boot Tutorials By Chad Darby](https://www.udemy.com/user/chaddarby2/)
  - [Awesome README](https://readme.so/)
