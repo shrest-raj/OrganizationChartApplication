@@ -319,7 +319,7 @@ Deletes an employee having employee id as employeeId
 
 Request
 ```
-DELETE /api/v1/employees/10
+DELETE /api/employees/10
 ```
 
 Response
