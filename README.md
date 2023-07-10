@@ -28,17 +28,20 @@ The application offers the flexibility of using either MySQL or H2 (in-memory) d
 
 To install the Organization Charts application, please follow the steps below:
 
-- Ensure that you have Java Development Kit (JDK) installed on your system. The recommended version is JDK 8 or above.
+- Ensure that you have Java Development Kit (JDK) installed on your system. The recommended version is JDK 17 or above.
 
 - Download or clone the project repository from the designated source.
-
+  - ```git clone https://github.com/shrest-raj/OrganizationChartApplication```
+  - This command will clone this application in your local machine.
 - Open a terminal or command prompt and navigate to the project directory.
 
 - If you plan to use MySQL as the database, ensure that you have MySQL installed and running on your system. Create a new database for the application if needed.
 
-- Open the application.properties file in the project's resources directory. Update the database configuration properties accordingly, such as the database URL, username, and password.
-
 - If you prefer to use the H2 in-memory database, no additional configuration is required.
+
+- Open the application.properties file in the project's resources directory.
+- 
+- Update the database configuration properties accordingly, in the spring active profiles you can set the database you prefer .
 
 - Build the project using Maven by executing the following command: 
 
@@ -50,7 +53,7 @@ To install the Organization Charts application, please follow the steps below:
 
 - The application will start, and you should see the console output indicating that the server is running.
 
-- Open a web browser and navigate to http://localhost:8080 (port number can be configured in the application.properties file) to access the application.
+- Open a web browser and navigate to http://localhost:9091 (port number can be configured in the application.properties file) to access the application.
 
 ## Usage
 
