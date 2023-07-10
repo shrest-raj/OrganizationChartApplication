@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ExceptionAdvice</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.springproject.orgschart.exceptions</a>
+</div>
+
+<h1>Coverage Summary for Class: ExceptionAdvice (com.springproject.orgschart.exceptions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExceptionAdvice</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (2/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (2/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.springproject.orgschart.exceptions;
+&nbsp;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.ExceptionHandler;
+&nbsp;import org.springframework.web.bind.annotation.RestControllerAdvice;
+&nbsp;import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+&nbsp;
+&nbsp;import java.util.NoSuchElementException;
+&nbsp;
+&nbsp;@RestControllerAdvice
+<b class="fc">&nbsp;public class ExceptionAdvice extends ResponseEntityExceptionHandler {</b>
+&nbsp;
+&nbsp;    @ExceptionHandler(DataNotFoundException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleNotFoundException(DataNotFoundException dataNotFoundException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Sorry, We have no data to display, please post some data first!!!&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(NoSuchElementException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleNoSuchElementException(NoSuchElementException noSuchElementException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;The given id is not present in DB.\nPlease change your request!&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(NameNotNullException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleNameNotNullException(NameNotNullException nameNotNullException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Input name field is empty.\nPlease look into it!&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(InvalidManagerIdException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleInvalidManagerIdException(InvalidManagerIdException invalidManagerIdException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Your entered Manager ID is out of bounds.\nPlease look into it!&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(InvalidManagerLevelException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleInvalidManagerLevelException(InvalidManagerLevelException invalidManagerLevelException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Your entered Manager ID is invalid because a person can&#39;t report to a person with designation either as same or lower in order.\nAlso please check if the level difference between manager and employee is equal to 1.\nPlease look into it!&quot;, HttpStatus.CONFLICT);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(DuplicateEmployeeException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleDuplicateEmployeeException(DuplicateEmployeeException duplicateEmployeeException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Sorry,Employee with same credentials already exists. \nPlease try again!&quot;, HttpStatus.CONFLICT);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(EmployeeNotFoundException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleDuplicateEmployeeException(EmployeeNotFoundException employeeNotFoundException) {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Employee with the given ID not found. \nPlease try again !&quot;, HttpStatus.NOT_FOUND);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(MultipleDirectorException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleMultipleDirectorException(MultipleDirectorException multipleDirectorException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Multiple Directors cannot exist in an organization. \nPlease try again !&quot;, HttpStatus.CONFLICT);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(NameAmbiguityException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleNameAmbiguityException(NameAmbiguityException nameAmbiguityException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;As replace is set false, the name of the employee cannot change. \nPlease try again !&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ExceptionHandler(DirectorReplacementException.class)
+&nbsp;    public ResponseEntity&lt;String&gt; handleDirectorReplacementException(DirectorReplacementException directorReplacementException) {
+<b class="nc">&nbsp;        return new ResponseEntity&lt;String&gt;(&quot;Director cannot be replaced when the replace field is set false try setting it to true. \nPlease try again !&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-10 16:09</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+com.springproject.orgschart
+com.springproject.orgschart.configuration
+com.springproject.orgschart.controller
+com.springproject.orgschart.controllerlevel
+com.springproject.orgschart.dao
+com.springproject.orgschart.dto
+com.springproject.orgschart.entity
+com.springproject.orgschart.exceptions
+com.springproject.orgschart.service

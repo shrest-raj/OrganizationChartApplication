@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EmployeeDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.springproject.orgschart.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeDTO (com.springproject.orgschart.dto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeDTO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (16/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.6%
+  </span>
+  <span class="absValue">
+    (35/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.springproject.orgschart.dto;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;public class EmployeeDTO {
+&nbsp;    private int id;
+&nbsp;    private String name;
+&nbsp;    private String jobTitle;
+&nbsp;    private Long managerId;
+&nbsp;    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+&nbsp;    private Boolean replace;
+&nbsp;
+&nbsp;
+&nbsp;    // Constructors
+<b class="fc">&nbsp;    public EmployeeDTO() {</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public EmployeeDTO(String name, String jobTitle, Long managerId, Boolean replace) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.jobTitle = jobTitle;</b>
+<b class="fc">&nbsp;        this.managerId = managerId;</b>
+<b class="fc">&nbsp;        this.replace = replace;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public EmployeeDTO(int id, String name, String jobTitle, Long managerId) {</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.jobTitle = jobTitle;</b>
+<b class="fc">&nbsp;        this.managerId = managerId;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public EmployeeDTO(int id, String name, String jobTitle, Long managerId, Boolean replace) {</b>
+<b class="fc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.jobTitle = jobTitle;</b>
+<b class="fc">&nbsp;        this.managerId = managerId;</b>
+<b class="fc">&nbsp;        this.replace = replace;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public EmployeeDTO(String name, String jobTitle, Long managerId) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.jobTitle = jobTitle;</b>
+<b class="fc">&nbsp;        this.managerId = managerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Getters and setters
+&nbsp;    public int getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(int id) {
+<b class="fc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setName(String name) {
+<b class="fc">&nbsp;        this.name = name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getJobTitle() {
+<b class="fc">&nbsp;        return jobTitle;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setJobTitle(String jobTitle) {
+<b class="fc">&nbsp;        this.jobTitle = jobTitle;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Long getManagerId() {
+<b class="fc">&nbsp;        return managerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setManagerId(Long managerId) {
+<b class="fc">&nbsp;        this.managerId = managerId;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public Boolean getReplace() {
+<b class="fc">&nbsp;        return replace;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setReplace(Boolean replace) {
+<b class="fc">&nbsp;        this.replace = replace;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="fc">&nbsp;        if (this == o) return true;</b>
+<b class="fc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="fc">&nbsp;        EmployeeDTO that = (EmployeeDTO) o;</b>
+<b class="fc">&nbsp;        return id == that.id &amp;&amp; Objects.equals(name, that.name) &amp;&amp; Objects.equals(jobTitle, that.jobTitle) &amp;&amp; Objects.equals(managerId, that.managerId) &amp;&amp; Objects.equals(replace, that.replace);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(id, name, jobTitle, managerId, replace);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;EmployeeDTO{&quot; +</b>
+&nbsp;                &quot;id=&quot; + id +
+&nbsp;                &quot;, name=&#39;&quot; + name + &#39;\&#39;&#39; +
+&nbsp;                &quot;, jobTitle=&#39;&quot; + jobTitle + &#39;\&#39;&#39; +
+&nbsp;                &quot;, managerId=&quot; + managerId +
+&nbsp;                &quot;, replace=&quot; + replace +
+&nbsp;                &#39;}&#39;;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-10 16:09</div>
+</div>
+</body>
+</html>

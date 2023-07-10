@@ -1,0 +1,593 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > EmployeeServiceImplementation</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.springproject.orgschart.service</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeServiceImplementation (com.springproject.orgschart.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeServiceImplementation</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (19/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.2%
+  </span>
+  <span class="absValue">
+    (163/173)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.springproject.orgschart.service;
+&nbsp;
+&nbsp;import com.springproject.orgschart.exceptions.*;
+&nbsp;import com.springproject.orgschart.dao.EmployeeRepository;
+&nbsp;import com.springproject.orgschart.dao.LevelRepository;
+&nbsp;import com.springproject.orgschart.dto.EmployeeDTO;
+&nbsp;import com.springproject.orgschart.dto.OrganizationChartDTO;
+&nbsp;import com.springproject.orgschart.entity.Employee;
+&nbsp;import com.springproject.orgschart.entity.Level;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;import static java.lang.Long.valueOf;
+&nbsp;
+&nbsp;/**
+&nbsp; * The EmployeeServiceImplementation class is responsible for handling employee-related operations
+&nbsp; * by implementing the EmployeeService interface. It interacts with the EmployeeRepository and LevelRepository
+&nbsp; * to access employee data and level information from the database.
+&nbsp; *
+&nbsp; * @Service Indicates that this class is a Spring service component that provides business logic for handling employees.
+&nbsp; */
+&nbsp;
+&nbsp;@Service
+&nbsp;public class EmployeeServiceImplementation implements EmployeeService {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The EmployeeRepository instance used to access employee data from the database.
+&nbsp;     */
+&nbsp;    @Autowired
+&nbsp;    private final EmployeeRepository employeeRepository;
+&nbsp;    /**
+&nbsp;     * The LevelRepository instance used to access level information from the database.
+&nbsp;     */
+&nbsp;    @Autowired
+&nbsp;    private final LevelRepository levelRepository;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new EmployeeServiceImplementation with the specified EmployeeRepository and LevelRepository.
+&nbsp;     *
+&nbsp;     * @param employeeRepository The employee repository to be used for accessing employee data.
+&nbsp;     * @param levelRepository    The level repository to be used for accessing level information.
+&nbsp;     */
+<b class="fc">&nbsp;    public EmployeeServiceImplementation(EmployeeRepository employeeRepository, LevelRepository levelRepository) {</b>
+<b class="fc">&nbsp;        this.employeeRepository = employeeRepository;</b>
+<b class="fc">&nbsp;        this.levelRepository = levelRepository;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of all employees sorted by name.
+&nbsp;     *
+&nbsp;     * @return The list of EmployeeDTO objects representing all employees, sorted by name.
+&nbsp;     * @throws DataNotFoundException if the list of employees is empty.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public List&lt;EmployeeDTO&gt; getAllEmployeesSortedByName() {
+<b class="fc">&nbsp;        List&lt;Employee&gt; employees = employeeRepository.findAll(Sort.by(Sort.Direction.ASC, &quot;name&quot;));</b>
+<b class="fc">&nbsp;        if (employees.isEmpty()) {</b>
+<b class="fc">&nbsp;            throw new DataNotFoundException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return mapToEmployeeDTOList(employees);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the organization chart for a specific employee.
+&nbsp;     *
+&nbsp;     * @param employeeId The ID of the employee.
+&nbsp;     * @return The OrganizationChartDTO containing the employee&#39;s information, manager, colleagues, and direct reports.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public OrganizationChartDTO getEmployeeOrganizationChart(Long employeeId) {
+<b class="fc">&nbsp;        Optional&lt;Employee&gt; optionalEmployee = employeeRepository.findById(employeeId);</b>
+<b class="fc">&nbsp;        if (optionalEmployee.isEmpty()) {</b>
+&nbsp;
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        Employee employee = optionalEmployee.get();</b>
+<b class="fc">&nbsp;        EmployeeDTO employeeDTO = mapToEmployeeDTO(employee);</b>
+<b class="fc">&nbsp;        EmployeeDTO managerDTO = null;</b>
+<b class="fc">&nbsp;        if (employee.getManager() != null) {</b>
+<b class="fc">&nbsp;            managerDTO = mapToEmployeeDTO(employee.getManager());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        List&lt;EmployeeDTO&gt; colleagues = getColleagues(employee);</b>
+<b class="fc">&nbsp;        List&lt;EmployeeDTO&gt; directReports = getDirectReports(employee);</b>
+<b class="fc">&nbsp;        return new OrganizationChartDTO(employeeDTO, managerDTO, colleagues, directReports);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a new employee to the database.
+&nbsp;     *
+&nbsp;     * @param employeeDTO The EmployeeDTO object representing the new employee to be added.
+&nbsp;     * @return The EmployeeDTO object representing the newly added employee.
+&nbsp;     * @throws NameNotNullException         if the employee name is null or empty.
+&nbsp;     * @throws InvalidManagerLevelException if the employee&#39;s manager level is invalid.
+&nbsp;     * @throws DuplicateEmployeeException   if an employee with the same name already exists.
+&nbsp;     * @throws MultipleDirectorException    if multiple directors are attempted to be added.
+&nbsp;     * @throws InvalidManagerIdException    if the specified manager ID is invalid(exceeds the number of employees in the db).
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
+<b class="fc">&nbsp;        if (Objects.equals(employeeDTO.getName(), &quot;&quot;) || employeeDTO.getJobTitle().equalsIgnoreCase(&quot;director&quot;) || employeeDTO.getManagerId() &gt; getTotalEmployeeCount() || isInvalidManagerLevel(employeeDTO) || employeeDTO.getManagerId() == null) {</b>
+<b class="fc">&nbsp;            if (Objects.equals(employeeDTO.getName(), &quot;&quot;)) {</b>
+<b class="fc">&nbsp;                throw new NameNotNullException();</b>
+<b class="fc">&nbsp;            } else if ((employeeDTO.getManagerId() == null || employeeDTO.getJobTitle().equalsIgnoreCase(&quot;director&quot;)) &amp;&amp; employeeRepository.existsByJobTitle(&quot;Director&quot;)) {</b>
+<b class="fc">&nbsp;                throw new MultipleDirectorException();</b>
+<b class="fc">&nbsp;            } else if (employeeDTO.getManagerId() &gt; getTotalEmployeeCount()) {</b>
+<b class="fc">&nbsp;                throw new InvalidManagerIdException();</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                throw new InvalidManagerLevelException();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (employeeRepository.existsByName(employeeDTO.getName())) {</b>
+<b class="fc">&nbsp;            throw new DuplicateEmployeeException();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Check if there is already a director in the database
+<b class="fc">&nbsp;        if (employeeDTO.getJobTitle().equals(&quot;Director&quot;) &amp;&amp; employeeRepository.existsByJobTitle(&quot;director&quot;)) {</b>
+<b class="nc">&nbsp;            throw new MultipleDirectorException();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Employee employee = mapToEmployee(employeeDTO);</b>
+<b class="fc">&nbsp;        Level levelEmployee = levelRepository.findByDesignation(employee.getJobTitle());</b>
+<b class="fc">&nbsp;        employee.setLevel(levelEmployee);</b>
+<b class="fc">&nbsp;        Employee savedEmployee = employeeRepository.save(employee);</b>
+<b class="fc">&nbsp;        return mapToEmployeeDTO(savedEmployee);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Replaces the details of an existing employee with new details.
+&nbsp;     *
+&nbsp;     * @param employeeId  The ID of the employee to be replaced.
+&nbsp;     * @param employeeDTO The updated EmployeeDTO object representing the employee&#39;s new details.
+&nbsp;     * @return true if the employee is successfully replaced, false otherwise.
+&nbsp;     */
+&nbsp;
+&nbsp;    public boolean replaceEmployee(Long employeeId, EmployeeDTO employeeDTO) {
+<b class="fc">&nbsp;        Optional&lt;Employee&gt; optionalEmployee = employeeRepository.findById(employeeId);</b>
+<b class="fc">&nbsp;        if (optionalEmployee.isEmpty()) {</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (Objects.equals(employeeDTO.getName(), &quot;&quot;)) {</b>
+<b class="fc">&nbsp;            throw new NameNotNullException();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Employee existingEmployee = optionalEmployee.get();</b>
+<b class="fc">&nbsp;        if (employeeId == 1) {</b>
+<b class="fc">&nbsp;            if (&quot;Director&quot;.equals(employeeDTO.getJobTitle()) &amp;&amp; employeeDTO.getManagerId() == null) {</b>
+<b class="fc">&nbsp;                existingEmployee.setName(employeeDTO.getName());</b>
+<b class="fc">&nbsp;                existingEmployee.setJobTitle(employeeDTO.getJobTitle());</b>
+<b class="fc">&nbsp;                existingEmployee.setManagerId(employeeDTO.getManagerId());</b>
+<b class="fc">&nbsp;                employeeRepository.save(existingEmployee);</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        String employeeJobTitle = convertJobTitle(employeeDTO.getJobTitle());</b>
+<b class="fc">&nbsp;        Optional&lt;Level&gt; optionalLevel = Optional.ofNullable(levelRepository.findByDesignation(employeeJobTitle));</b>
+<b class="fc">&nbsp;        if (optionalLevel.isEmpty()) {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Level level = optionalLevel.get();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (level.getLevelId() != existingEmployee.getLevel().getLevelId() ||</b>
+<b class="fc">&nbsp;                !employeeDTO.getManagerId().equals(existingEmployee.getManagerId())) {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        existingEmployee.setName(employeeDTO.getName());</b>
+<b class="fc">&nbsp;        existingEmployee.setJobTitle(employeeDTO.getJobTitle());</b>
+<b class="fc">&nbsp;        existingEmployee.setManagerId(employeeDTO.getManagerId());</b>
+&nbsp;
+<b class="fc">&nbsp;        employeeRepository.save(existingEmployee);</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the details of an existing employee with new details.
+&nbsp;     *
+&nbsp;     * @param employeeId  The ID of the employee to be replaced.
+&nbsp;     * @param employeeDTO The updated EmployeeDTO object representing the employee&#39;s new details.
+&nbsp;     * @return true if the employee is successfully updated, false otherwise.
+&nbsp;     */
+&nbsp;    public boolean updateEmployeeDetails(Long employeeId, EmployeeDTO employeeDTO) {
+&nbsp;        // Retrieve the existing employee
+<b class="fc">&nbsp;        Optional&lt;Employee&gt; optionalEmployee = employeeRepository.findById(employeeId);</b>
+<b class="fc">&nbsp;        if (optionalEmployee.isEmpty()) {</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (Objects.equals(employeeDTO.getName(), &quot;&quot;)) {</b>
+<b class="fc">&nbsp;            throw new NameNotNullException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (employeeId == 1 || Objects.equals(employeeDTO.getJobTitle(), &quot;Director&quot;)) {</b>
+<b class="fc">&nbsp;            throw new DirectorReplacementException();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (!Objects.equals(employeeDTO.getName(), optionalEmployee.get().getName())) {</b>
+<b class="fc">&nbsp;            throw new NameAmbiguityException();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Employee existingEmployee = optionalEmployee.get();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (employeeDTO.getJobTitle() != null) {</b>
+<b class="fc">&nbsp;            existingEmployee.setJobTitle(employeeDTO.getJobTitle());</b>
+&nbsp;
+&nbsp;        } else {
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (employeeDTO.getManagerId() != null) {</b>
+<b class="fc">&nbsp;            String employeeJobTitle = convertJobTitle(employeeDTO.getJobTitle());</b>
+<b class="fc">&nbsp;            Optional&lt;Level&gt; optionalLevel = Optional.ofNullable(levelRepository.findByDesignation(employeeJobTitle));</b>
+&nbsp;
+<b class="fc">&nbsp;            if (optionalLevel.isEmpty()) {</b>
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Level level = optionalLevel.get();</b>
+<b class="fc">&nbsp;            int employeeLevelId = level.getLevelId();</b>
+&nbsp;
+<b class="fc">&nbsp;            Employee manager = employeeRepository.findById(employeeDTO.getManagerId()).orElse(null);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (manager == null) {</b>
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Level managerLevel = manager.getLevel();</b>
+&nbsp;//            int levelDiff = Math.abs(managerLevel.getLevelId() - employeeLevelId);
+&nbsp;
+<b class="fc">&nbsp;            if (managerLevel.getLevelId() &gt;= employeeLevelId) {</b>
+<b class="nc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            existingEmployee.setManagerId(employeeDTO.getManagerId());</b>
+<b class="fc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        employeeRepository.save(existingEmployee);</b>
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Deletes an employee from the database.
+&nbsp;     *
+&nbsp;     * @param employeeId The ID of the employee to be deleted.
+&nbsp;     * @return true if the employee is successfully deleted, false otherwise.
+&nbsp;     * @throws EmployeeNotFoundException if the employee with the specified ID is not found.
+&nbsp;     */
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean deleteEmployee(Long employeeId) {
+<b class="fc">&nbsp;        Optional&lt;Employee&gt; optionalEmployee = employeeRepository.findById(employeeId);</b>
+<b class="fc">&nbsp;        if (optionalEmployee.isPresent()) {</b>
+<b class="fc">&nbsp;            Employee employee = optionalEmployee.get();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (employee.getJobTitle().equals(&quot;Director&quot;) &amp;&amp; hasDirectReports(employee)) {</b>
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            List&lt;Employee&gt; directReports = getDirectReports(employeeId);</b>
+<b class="fc">&nbsp;            if (!directReports.isEmpty()) {</b>
+<b class="fc">&nbsp;                Employee manager = employee.getManager();</b>
+<b class="fc">&nbsp;                for (Employee directReport : directReports) {</b>
+<b class="fc">&nbsp;                    directReport.setManager(manager);</b>
+<b class="fc">&nbsp;                    employeeRepository.save(directReport);</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;            }
+<b class="fc">&nbsp;            employeeRepository.delete(employee);</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new EmployeeNotFoundException();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of direct reports for a given employee ID.
+&nbsp;     *
+&nbsp;     * @param employeeId The ID of the employee.
+&nbsp;     * @return The list of Employee objects representing direct reports.
+&nbsp;     */
+&nbsp;
+&nbsp;    private List&lt;Employee&gt; getDirectReports(Long employeeId) {
+<b class="fc">&nbsp;        List&lt;Employee&gt; allEmployees = employeeRepository.findAll();</b>
+<b class="fc">&nbsp;        List&lt;Employee&gt; directReports = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (Employee employee : allEmployees) {</b>
+<b class="fc">&nbsp;            if (employee.getManager() != null &amp;&amp; employee.getManager().getId().equals(employeeId)) {</b>
+<b class="fc">&nbsp;                directReports.add(employee);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return directReports;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an employee has any direct reports.
+&nbsp;     *
+&nbsp;     * @param employee The employee.
+&nbsp;     * @return true if the employee has direct reports, false otherwise.
+&nbsp;     */
+&nbsp;    private boolean hasDirectReports(Employee employee) {
+<b class="fc">&nbsp;        List&lt;Employee&gt; directReports = getDirectReports(employee.getId());</b>
+<b class="fc">&nbsp;        return !directReports.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the total number of employees in the database.
+&nbsp;     *
+&nbsp;     * @return The total number of employees.
+&nbsp;     */
+&nbsp;    public int getTotalEmployeeCount() {
+<b class="fc">&nbsp;        List&lt;Employee&gt; employees = employeeRepository.findAll();</b>
+<b class="fc">&nbsp;        int count = 0;</b>
+<b class="fc">&nbsp;        for (Employee employee : employees) {</b>
+<b class="fc">&nbsp;            count++;</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of colleagues for a given employee.
+&nbsp;     *
+&nbsp;     * @param employee The employee.
+&nbsp;     * @return The list of EmployeeDTO objects representing colleagues.
+&nbsp;     */
+&nbsp;
+&nbsp;    private List&lt;EmployeeDTO&gt; getColleagues(Employee employee) {
+<b class="fc">&nbsp;        if (employee.getManager() != null) {</b>
+&nbsp;
+<b class="fc">&nbsp;            Employee manager = employee.getManager();</b>
+<b class="fc">&nbsp;            List&lt;EmployeeDTO&gt; colleagues = getColleaguesByManagerId(manager);</b>
+<b class="fc">&nbsp;            colleagues.remove(mapToEmployeeDTO(employee));</b>
+<b class="fc">&nbsp;            return colleagues;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return Collections.emptyList();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of direct reports for a given employee.
+&nbsp;     *
+&nbsp;     * @param employee The employee.
+&nbsp;     * @return The list of EmployeeDTO objects representing direct reports.
+&nbsp;     */
+&nbsp;
+&nbsp;    private List&lt;EmployeeDTO&gt; getDirectReports(Employee employee) {
+<b class="fc">&nbsp;        return getDirectReportsByManagerId(Math.toIntExact(employee.getId()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of colleagues for a given manager.
+&nbsp;     *
+&nbsp;     * @param manager The manager employee.
+&nbsp;     * @return The list of EmployeeDTO objects representing colleagues.
+&nbsp;     */
+&nbsp;
+&nbsp;    private List&lt;EmployeeDTO&gt; getColleaguesByManagerId(Employee manager) {
+<b class="fc">&nbsp;        List&lt;EmployeeDTO&gt; colleagues = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        Long managerId = manager.getId();</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Employee&gt; employees = employeeRepository.findAll();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Employee employee : employees) {</b>
+&nbsp;
+<b class="fc">&nbsp;            if (Objects.equals(employee.getManagerId(), managerId)) {</b>
+<b class="fc">&nbsp;                colleagues.add(mapToEmployeeDTO(employee));</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return colleagues;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a list of direct reports for a given manager ID.
+&nbsp;     *
+&nbsp;     * @param managerId The ID of the manager.
+&nbsp;     * @return The list of EmployeeDTO objects representing direct reports.
+&nbsp;     */
+&nbsp;    private List&lt;EmployeeDTO&gt; getDirectReportsByManagerId(int managerId) {
+<b class="fc">&nbsp;        List&lt;EmployeeDTO&gt; directReports = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Employee&gt; employees = employeeRepository.findAll();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Employee employee : employees) {</b>
+&nbsp;
+<b class="fc">&nbsp;            if (employee.getManager() != null &amp;&amp; employee.getManager().getId() == managerId) {</b>
+<b class="fc">&nbsp;                directReports.add(mapToEmployeeDTO(employee));</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return directReports;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if the manager level specified in the EmployeeDTO object is invalid.
+&nbsp;     *
+&nbsp;     * @param employeeDTO The EmployeeDTO object.
+&nbsp;     * @return true if the manager level is invalid, false otherwise.
+&nbsp;     */
+&nbsp;
+&nbsp;    private boolean isInvalidManagerLevel(EmployeeDTO employeeDTO) {
+<b class="fc">&nbsp;        Employee employee = mapToEmployee(employeeDTO);</b>
+&nbsp;
+<b class="fc">&nbsp;        Optional&lt;Employee&gt; manager = employeeRepository.findById(employeeDTO.getManagerId());</b>
+&nbsp;
+<b class="fc">&nbsp;        String employeeJobTitle = convertJobTitle(employee.getJobTitle());</b>
+<b class="fc">&nbsp;        String managerJobTitle = convertJobTitle(manager.get().getJobTitle());</b>
+<b class="fc">&nbsp;        Level levelEmployee = levelRepository.findByDesignation(employeeJobTitle);</b>
+<b class="fc">&nbsp;        Level levelManager = levelRepository.findByDesignation(managerJobTitle);</b>
+<b class="fc">&nbsp;        int levelDiff = Math.abs(levelEmployee.getLevelId() - levelManager.getLevelId());</b>
+&nbsp;
+<b class="fc">&nbsp;        return levelManager.getLevelId() &gt;= levelEmployee.getLevelId() || levelDiff != 1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Converts a job title string to a standardized format(because in level table we have same level for many designation).
+&nbsp;     *
+&nbsp;     * @param jobTitle The job title.
+&nbsp;     * @return The standardized job title string.
+&nbsp;     */
+&nbsp;
+&nbsp;    private String convertJobTitle(String jobTitle) {
+<b class="fc">&nbsp;        if (Objects.equals(jobTitle, &quot;Developer&quot;) || Objects.equals(jobTitle, &quot;DevOps&quot;) || Objects.equals(jobTitle, &quot;QA&quot;)) {</b>
+<b class="fc">&nbsp;            return &quot;Developer, DevOps, QA&quot;;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return jobTitle;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Maps a list of Employee objects to a list of EmployeeDTO objects.
+&nbsp;     *
+&nbsp;     * @param employees The list of Employee objects to be mapped.
+&nbsp;     * @return The list of EmployeeDTO objects.
+&nbsp;     */
+&nbsp;    private List&lt;EmployeeDTO&gt; mapToEmployeeDTOList(List&lt;Employee&gt; employees) {
+<b class="fc">&nbsp;        return employees.stream().map(this::mapToEmployeeDTO).collect(Collectors.toList());//references the mapToEmployeeDTO</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Maps an Employee object to an EmployeeDTO object.
+&nbsp;     *
+&nbsp;     * @param employee The Employee object to be mapped.
+&nbsp;     * @return The EmployeeDTO object.
+&nbsp;     */
+&nbsp;    private EmployeeDTO mapToEmployeeDTO(Employee employee) {
+<b class="fc">&nbsp;        EmployeeDTO employeeDTO = new EmployeeDTO();</b>
+<b class="fc">&nbsp;        employeeDTO.setId(Math.toIntExact(employee.getId()));</b>
+<b class="fc">&nbsp;        employeeDTO.setName(employee.getName());</b>
+<b class="fc">&nbsp;        employeeDTO.setJobTitle(employee.getJobTitle());</b>
+<b class="fc">&nbsp;        if (employee.getManager() != null) {</b>
+<b class="fc">&nbsp;            employeeDTO.setManagerId(employee.getManager().getId());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return employeeDTO;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Maps an EmployeeDTO object to an Employee object.
+&nbsp;     *
+&nbsp;     * @param employeeDTO The EmployeeDTO object to be mapped.
+&nbsp;     * @return The Employee object.
+&nbsp;     */
+&nbsp;    private Employee mapToEmployee(EmployeeDTO employeeDTO) {
+<b class="fc">&nbsp;        Employee employee = new Employee();</b>
+<b class="fc">&nbsp;        employee.setId(valueOf((long) employeeDTO.getId()));</b>
+<b class="fc">&nbsp;        employee.setName(employeeDTO.getName());</b>
+<b class="fc">&nbsp;        employee.setJobTitle(employeeDTO.getJobTitle());</b>
+<b class="fc">&nbsp;        if (employeeDTO.getManagerId() != null) {</b>
+<b class="fc">&nbsp;            Optional&lt;Employee&gt; optionalManager = employeeRepository.findById(employeeDTO.getManagerId());</b>
+<b class="fc">&nbsp;            optionalManager.ifPresent(employee::setManager);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return employee;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if an employee with the given ID exists.
+&nbsp;     *
+&nbsp;     * @param employeeId The ID of the employee.
+&nbsp;     * @return true if the employee exists, false otherwise.
+&nbsp;     */
+&nbsp;    public boolean employeeExists(Long employeeId) {
+<b class="nc">&nbsp;        return employeeRepository.existsById(employeeId);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-10 16:09</div>
+</div>
+</body>
+</html>

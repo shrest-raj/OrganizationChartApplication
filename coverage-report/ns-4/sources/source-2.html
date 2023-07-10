@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > OrganizationChartDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.springproject.orgschart.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: OrganizationChartDTO (com.springproject.orgschart.dto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">OrganizationChartDTO</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    54.5%
+  </span>
+  <span class="absValue">
+    (6/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (10/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.springproject.orgschart.dto;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;public class OrganizationChartDTO {
+&nbsp;    private EmployeeDTO employee;
+&nbsp;    private EmployeeDTO manager;
+&nbsp;    private List&lt;EmployeeDTO&gt; colleagues;
+&nbsp;    private List&lt;EmployeeDTO&gt; directReports;
+&nbsp;
+<b class="fc">&nbsp;    public OrganizationChartDTO(EmployeeDTO employee, EmployeeDTO manager, List&lt;EmployeeDTO&gt; colleagues, List&lt;EmployeeDTO&gt; directReports) {</b>
+<b class="fc">&nbsp;        this.employee = employee;</b>
+<b class="fc">&nbsp;        this.manager = manager;</b>
+<b class="fc">&nbsp;        this.colleagues = colleagues;</b>
+<b class="fc">&nbsp;        this.directReports = directReports;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public EmployeeDTO getEmployee() {
+<b class="fc">&nbsp;        return employee;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEmployee(EmployeeDTO employee) {
+<b class="nc">&nbsp;        this.employee = employee;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public EmployeeDTO getManager() {
+<b class="fc">&nbsp;        return manager;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setManager(EmployeeDTO manager) {
+<b class="nc">&nbsp;        this.manager = manager;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EmployeeDTO&gt; getColleagues() {
+<b class="fc">&nbsp;        return colleagues;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setColleagues(List&lt;EmployeeDTO&gt; colleagues) {
+<b class="nc">&nbsp;        this.colleagues = colleagues;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;EmployeeDTO&gt; getDirectReports() {
+<b class="fc">&nbsp;        return directReports;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDirectReports(List&lt;EmployeeDTO&gt; directReports) {
+<b class="nc">&nbsp;        this.directReports = directReports;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="fc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc">&nbsp;        OrganizationChartDTO that = (OrganizationChartDTO) o;</b>
+<b class="nc">&nbsp;        return Objects.equals(employee, that.employee) &amp;&amp; Objects.equals(manager, that.manager) &amp;&amp; Objects.equals(colleagues, that.colleagues) &amp;&amp; Objects.equals(directReports, that.directReports);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(employee, manager, colleagues, directReports);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-07-10 16:09</div>
+</div>
+</body>
+</html>
