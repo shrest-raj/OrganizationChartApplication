@@ -5,13 +5,13 @@ This is a user-friendly Spring Boot application that offers a REST API implement
 
 
 ## Table Of Contents
-- [Introduction]()
-- [Installation]()
-- [Usage]()
-- [API Documentation]()
-- [Database Schema]()
-- [Testing]()
-- [Acknowledgements]()
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Database Schema](#database-schema)
+- [Testing](#testing)
+- [Acknowledgements](#acknowledgements)
 
 
 ## Introduction
