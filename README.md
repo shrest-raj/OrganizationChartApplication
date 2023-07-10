@@ -40,7 +40,7 @@ To install the Organization Charts application, please follow the steps below:
 - If you prefer to use the H2 in-memory database, no additional configuration is required.
 
 - Open the application.properties file in the project's resources directory.
-- 
+
 - Update the database configuration properties accordingly, in the spring active profiles you can set the database you prefer .
 
 - Build the project using Maven by executing the following command: 
