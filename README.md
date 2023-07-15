@@ -387,6 +387,11 @@ To run the tests for the application, follow these steps:
     - `mvn test -Dtest=”TestClassName”`
 This command will trigger the execution of the unit tests for the mentioned class, validating different parts of the application.
 
+## Documenatation
+
+- For JavaDocs documentation navigate to [documentation](https://github.com/shrest-raj/OrganizationChartApplication/tree/master/documentation).It provides documentation for each and every class, their constructors, methods, etc.
+- For Swagger API documentation navigate to [swagger-ui](http://localhost:9091/swagger-ui/index.html#/).It provides explicit details and the payload format for all the API endpoints.
+
 ## Acknowledgements
 
  - [Spring Boot Tutorials By Chad Darby](https://www.udemy.com/user/chaddarby2/)
