@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"h2", "mysql"})
+@Profile({"h2", "mysql", "dockersql"})
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 public class DatabaseConfiguration {
     private final DataSourceProperties dataSourceProperties;

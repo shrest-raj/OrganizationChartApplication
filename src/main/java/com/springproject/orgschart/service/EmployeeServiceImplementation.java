@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +75,15 @@ public class EmployeeServiceImplementation implements EmployeeService {
      */
     @Override
     public OrganizationChartDTO getEmployeeOrganizationChart(Long employeeId) {
+//        if(employeeId) is not an long which lies between 1 to employee count throw an exception employee count is not defined hard code here itself
+        long employeeCount = employeeRepository.count();
+
+        // Check if employeeId is a valid long value between 1 and employee count, throw an exception if not
+        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+            throw new EmployeeIdNotValidException();
+        }
+
+
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
 
@@ -86,6 +98,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         List<EmployeeDTO> colleagues = getColleagues(employee);
         List<EmployeeDTO> directReports = getDirectReports(employee);
         return new OrganizationChartDTO(employeeDTO, managerDTO, colleagues, directReports);
+
 
     }
 
@@ -102,9 +115,11 @@ public class EmployeeServiceImplementation implements EmployeeService {
      */
     @Override
     public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
-        if (Objects.equals(employeeDTO.getName(), "") || employeeDTO.getJobTitle().equalsIgnoreCase("director") || employeeDTO.getManagerId() > getTotalEmployeeCount() || isInvalidManagerLevel(employeeDTO) || employeeDTO.getManagerId() == null) {
-            if (Objects.equals(employeeDTO.getName(), "")) {
+        if (Objects.equals(employeeDTO.getName(), null) || employeeDTO.getName().trim().isEmpty() || !isValidName(employeeDTO.getName()) || employeeDTO.getJobTitle() == null || employeeDTO.getJobTitle().trim().isEmpty() || !levelRepository.existsByDesignation(employeeDTO.getJobTitle()) || employeeDTO.getJobTitle().equalsIgnoreCase("director") || employeeDTO.getManagerId() > getTotalEmployeeCount() || isInvalidManagerLevel(employeeDTO) || employeeDTO.getManagerId() == null) {
+            if (Objects.equals(employeeDTO.getName(), null) || employeeDTO.getName().trim().isEmpty() || !isValidName(employeeDTO.getName())) {
                 throw new NameNotNullException();
+            } else if (employeeDTO.getJobTitle() == null || employeeDTO.getJobTitle().trim().isEmpty() || !levelRepository.existsByDesignation(employeeDTO.getJobTitle())) {
+                throw new InvalidJobTitleException();
             } else if ((employeeDTO.getManagerId() == null || employeeDTO.getJobTitle().equalsIgnoreCase("director")) && employeeRepository.existsByJobTitle("Director")) {
                 throw new MultipleDirectorException();
             } else if (employeeDTO.getManagerId() > getTotalEmployeeCount()) {
@@ -139,6 +154,16 @@ public class EmployeeServiceImplementation implements EmployeeService {
      */
 
     public boolean replaceEmployee(Long employeeId, EmployeeDTO employeeDTO) {
+
+        long employeeCount = employeeRepository.count();
+
+        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+            throw new EmployeeIdNotValidException();
+        } else if (Objects.equals(employeeDTO.getName(), null) || employeeDTO.getName().trim().isEmpty() || !isValidName(employeeDTO.getName())) {
+            throw new NameNotNullException();
+        } else if (employeeDTO.getJobTitle() == null || employeeDTO.getJobTitle().trim().isEmpty() || !levelRepository.existsByDesignation(employeeDTO.getJobTitle())) {
+            throw new InvalidJobTitleException();
+        }
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
             return false;
@@ -258,6 +283,12 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
     @Override
     public boolean deleteEmployee(Long employeeId) {
+        long employeeCount = employeeRepository.count();
+
+        // Check if employeeId is a valid long value between 1 and employee count, throw an exception if not
+        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+            throw new EmployeeIdNotValidException();
+        }
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
@@ -486,5 +517,25 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public boolean employeeExists(Long employeeId) {
         return employeeRepository.existsById(employeeId);
     }
+
+    private boolean isNumeric(Long value) {
+        try {
+            Long.parseLong(String.valueOf(value));
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+
+    }
+
+    private boolean isValidName(String name) {
+        // Regular expression pattern to match valid name format
+        String namePattern = "[A-Za-z]+";
+
+        // Check if the name matches the pattern
+        return Pattern.matches(namePattern, name);
+    }
+
 
 }

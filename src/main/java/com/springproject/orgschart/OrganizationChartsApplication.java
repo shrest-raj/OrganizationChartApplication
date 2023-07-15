@@ -2,6 +2,7 @@ package com.springproject.orgschart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
 * The class OrgschartApplication serves as a Spring Boot Application that facilitates automatic configuration
 * and initiates component scanning. It also acts as the entry point for the Employee Management System application.

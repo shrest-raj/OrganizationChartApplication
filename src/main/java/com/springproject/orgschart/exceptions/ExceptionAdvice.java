@@ -23,7 +23,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NameNotNullException.class)
     public ResponseEntity<String> handleNameNotNullException(NameNotNullException nameNotNullException) {
-        return new ResponseEntity<String>("Input name field is empty.\nPlease look into it!", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("Input name field is empty or invalid.\nPlease look into it!", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidManagerIdException.class)
@@ -45,7 +45,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleDuplicateEmployeeException(EmployeeNotFoundException employeeNotFoundException) {
         return new ResponseEntity<String>("Employee with the given ID not found. \nPlease try again !", HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler(MultipleDirectorException.class)
     public ResponseEntity<String> handleMultipleDirectorException(MultipleDirectorException multipleDirectorException) {
         return new ResponseEntity<String>("Multiple Directors cannot exist in an organization. \nPlease try again !", HttpStatus.CONFLICT);
@@ -59,6 +58,16 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DirectorReplacementException.class)
     public ResponseEntity<String> handleDirectorReplacementException(DirectorReplacementException directorReplacementException) {
         return new ResponseEntity<String>("Director cannot be replaced when the replace field is set false try setting it to true. \nPlease try again !", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployeeIdNotValidException.class)
+    public ResponseEntity<String> handleEmployeeIdNotFoundException(EmployeeIdNotValidException employeeIdNotFoundException) {
+        return new ResponseEntity<String>("Employee Id is not valid \nPlease try again !", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJobTitleException.class)
+    public ResponseEntity<String> handleInvalidJobTitleException(InvalidJobTitleException invalidJobTitleException) {
+        return new ResponseEntity<String>("Employee JobTitle is not valid \nPlease try again !", HttpStatus.BAD_REQUEST);
     }
 
 }
