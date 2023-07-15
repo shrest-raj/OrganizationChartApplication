@@ -1,5 +1,9 @@
 package com.springproject.orgschart;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.info.License;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +16,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 */
 
 @SpringBootApplication
+@OpenAPIDefinition(
+        info = @Info(
+                title="Organization Chart Application",
+                version = "1.0.0",
+                description = "The Organization Charts project is a user-friendly Spring Boot application that streamlines employee tracking and management in organizations. \n ",
+                termsOfService = "runcodenow",
+                contact = @Contact(
+                        name = "Mr Shrest Raj",
+                        email = "shrestrajofficial@gmail.com"
+                ),
+                license = @License(
+                        name="License",
+                        url="runcodenow"
+                )
+        )
+)
 public class OrganizationChartsApplication {
     /**
     * The main method serves as the entry point for the OrgsChartApplication
