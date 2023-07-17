@@ -21,9 +21,9 @@ import java.util.List;
  * @RequestMapping("/api") Specifies the base URL path for all requests handled by this controller.
  */
 @RestController
-@RequestMapping("/api")//applied to class level to map request path
+@RequestMapping("/api")
 public class EmployeeController {
-    @Autowired//automatic dependency injection is enabled
+    @Autowired
     private EmployeeServiceImplementation employeeServiceImpl;
 
     /**

@@ -79,7 +79,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         long employeeCount = employeeRepository.count();
 
         // Check if employeeId is a valid long value between 1 and employee count, throw an exception if not
-        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+        if (employeeId == null || employeeId < 1 || employeeId > employeeCount) {
             throw new EmployeeIdNotValidException();
         }
 
@@ -87,7 +87,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
 
-            return null;
+            throw new EmployeeNotFoundException();
         }
         Employee employee = optionalEmployee.get();
         EmployeeDTO employeeDTO = mapToEmployeeDTO(employee);
@@ -157,7 +157,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
         long employeeCount = employeeRepository.count();
 
-        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+        if (employeeId == null || employeeId < 1 || employeeId > employeeCount) {
             throw new EmployeeIdNotValidException();
         } else if (Objects.equals(employeeDTO.getName(), null) || employeeDTO.getName().trim().isEmpty() || !isValidName(employeeDTO.getName())) {
             throw new NameNotNullException();
@@ -286,7 +286,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
         long employeeCount = employeeRepository.count();
 
         // Check if employeeId is a valid long value between 1 and employee count, throw an exception if not
-        if (employeeId == null || !isNumeric(employeeId) || employeeId < 1 || employeeId > employeeCount) {
+        if (employeeId == null || employeeId < 1 || employeeId > employeeCount) {
             throw new EmployeeIdNotValidException();
         }
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
@@ -518,20 +518,10 @@ public class EmployeeServiceImplementation implements EmployeeService {
         return employeeRepository.existsById(employeeId);
     }
 
-    private boolean isNumeric(Long value) {
-        try {
-            Long.parseLong(String.valueOf(value));
-
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-
-    }
 
     private boolean isValidName(String name) {
         // Regular expression pattern to match valid name format
-        String namePattern = "[A-Za-z]+";
+        String namePattern = "[A-Za-z\\s]+";
 
         // Check if the name matches the pattern
         return Pattern.matches(namePattern, name);

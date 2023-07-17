@@ -1,10 +1,16 @@
 package com.springproject.orgschart.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.NoSuchElementException;
@@ -18,7 +24,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
         errorResponse.setErrorMessage("Sorry, We have no data to display, please post some data first!!!");
         errorResponse.setPath(request.getRequestURI());
-
+//        ex can be used if we throw the exception along with the message we can recieve it here
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -113,16 +119,15 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
 
-@ExceptionHandler(EmployeeIdNotValidException.class)
-public ResponseEntity<ErrorResponse> handleEmployeeIdNotFoundException(EmployeeIdNotValidException ex, HttpServletRequest request) {
-    ErrorResponse errorResponse = new ErrorResponse();
-    errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-    errorResponse.setErrorMessage("Employee Id is not valid. Please try again!");
-    errorResponse.setPath(request.getRequestURI());
+    @ExceptionHandler(EmployeeIdNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleEmployeeIdNotFoundException(EmployeeIdNotValidException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setErrorMessage("Employee Id is not valid. Please try again!");
+        errorResponse.setPath(request.getRequestURI());
 
-    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-}
-
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
 
     @ExceptionHandler(InvalidJobTitleException.class)
@@ -132,6 +137,27 @@ public ResponseEntity<ErrorResponse> handleEmployeeIdNotFoundException(EmployeeI
         errorResponse.setErrorMessage("Employee JobTitle is not valid. Please try again!");
         errorResponse.setPath(request.getRequestURI());
 
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+        errorResponse.setErrorMessage("Method POST is not supported to specify employee ID as it is incremental in db itself");
+        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+        errorResponse.setPath(servletWebRequest.getRequest().getRequestURI());
+        return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, ServletWebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setErrorMessage("Invalid Method Argument Type! Please check!");
+        errorResponse.setPath(request.getRequest().getRequestURI());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
