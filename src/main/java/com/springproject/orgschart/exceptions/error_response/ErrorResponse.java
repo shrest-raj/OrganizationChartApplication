@@ -1,4 +1,4 @@
-package com.springproject.orgschart.exceptions;
+package com.springproject.orgschart.exceptions.error_response;
 
 public class ErrorResponse {
 

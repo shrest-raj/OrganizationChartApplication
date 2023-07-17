@@ -1,5 +1,7 @@
-package com.springproject.orgschart.exceptions;
+package com.springproject.orgschart.exceptions.exception_handler;
 
+import com.springproject.orgschart.exceptions.*;
+import com.springproject.orgschart.exceptions.error_response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice
-public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(DataNotFoundException ex, HttpServletRequest request) {
