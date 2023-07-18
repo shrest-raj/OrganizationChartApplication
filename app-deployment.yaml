@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oraganization-chart
+spec:
+  selector:
+    matchLabels:
+      app: springboot-k8s-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: springboot-k8s-mysql
+    spec:
+      containers:
+        - name: springboot-crud-k8s
+          image: myapp:v3
+          ports:
+            - containerPort: 9091
+          env:
+            - name: DB_HOST
+              value: mysql:3306
+
+            - name: DB_NAME
+              value: shrest
+
+            - name: DB_USERNAME
+              value: root
+
+            - name: DB_PASSWORD
+              value: root
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-crud-svc
+spec:
+  selector:
+    app: springboot-k8s-mysql
+  ports:
+    - protocol: "TCP"
+      port: 9091
+      targetPort: 9091 # The port exposed by the service
+      nodePort: 30001
+  type: NodePort # type of the service.
