@@ -11,6 +11,7 @@ This is a user-friendly Spring Boot application that offers a REST API implement
 - [API Documentation](#api-documentation)
 - [Database Schema](#database-schema)
 - [Testing](#testing)
+- [Deployment](#deployment)
 - [Project Documentation](#project-documentation)
 - [Acknowledgements](#acknowledgements)
 
@@ -388,6 +389,25 @@ To run the tests for the application, follow these steps:
     - `mvn test -Dtest=”TestClassName”`
 This command will trigger the execution of the unit tests for the mentioned class, validating different parts of the application.
 
+## Deployment
+To deploy my Spring Boot application, I utilized Docker and Kubernetes.Here are the steps to follow:-
+-  Create a [DockerFile](https://github.com/shrest-raj/OrganizationChartApplication/blob/master/Dockerfile) to build a Docker image of the application.
+    - `docker build -t <image-name> .`
+-  Verify the successful creation of the Docker image:
+    - `docker images`
+-  Start Minikube cluster(install minikube using `brew install minikube`):
+    - `minikube start`
+-  Set the Docker environment to use the Minikube Docker daemon:
+    -  `eval $(minikube docker-env)`
+-  Create a Persistent Volume Claim (PVC) for data persistence of the database, Deployment for the database using the PVC and Service for the database:[db-deployment.yaml](https://github.com/shrest-raj/OrganizationChartApplication/blob/master/db-deployment.yaml)
+    -   `kubectl apply -f db-deployment.yaml`
+-  Create a Deployment for the application and specify the image also Expose the ports of the application Deployment using a Service:[app-deployment.yaml](https://github.com/shrest-raj/OrganizationChartApplication/blob/master/app-deployment.yaml)
+    -   `kubectl apply -f app-deployment.yaml`
+-  Verify the successful deployment of the application and database:
+    -   `kubectl get all`
+-  Access the application by hitting the assigned URL.
+    -   http://localhost:30001/api/employees using docker desktop context
+    -   http://192.168.49.2:30001/api/employees using minikube context (minikube ip command will give yout the ip and the port number can be identified from the service)
 ## Project Documentation
 
 - For JavaDocs documentation navigate to [documentation](https://github.com/shrest-raj/OrganizationChartApplication/tree/master/documentation).It provides documentation for each and every class, their constructors, methods, etc.
