@@ -17,18 +17,42 @@ spec:
           image: myapp:v3
           ports:
             - containerPort: 9091
+#          env:
+#            - name: DB_HOST
+#              value: mysql:3306
+#
+#            - name: DB_NAME
+#              value: shrest
+#
+#            - name: DB_USERNAME
+#              value: root
+#
+#            - name: DB_PASSWORD
+#              value: root
           env:
             - name: DB_HOST
-              value: mysql:3306
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: host
 
             - name: DB_NAME
-              value: shrest
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
 
             - name: DB_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: username
 
             - name: DB_PASSWORD
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: password
 
 
 ---

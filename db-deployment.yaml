@@ -39,12 +39,24 @@ spec:
 #          args:
 #            - "--ignore-db-dir=lost+found" # Workaround for https://github.com/docker-library/mysql/issues/186
           name: mysql
+#          env:
+#            - name: MYSQL_ROOT_PASSWORD
+#              value : root
+#
+#            - name: MYSQL_DATABASE
+#              value : shrest
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value : root
+              valueFrom:
+                secretKeyRef:
+                  name : mysql-secrets
+                  key :  password
 
             - name: MYSQL_DATABASE
-              value : shrest
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: dbName
 
           ports:
             - containerPort: 3306

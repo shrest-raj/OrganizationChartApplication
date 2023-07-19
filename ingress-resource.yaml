@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shrest-app-ingress
+spec:
+  rules:
+     - http:
+        paths:
+          - path: /shrest
+            pathType: Prefix
+            backend:
+              service:
+                name: springboot-crud-svc
+                port:
+                  number: 9091
