@@ -1,6 +1,4 @@
 package com.springproject.orgschart.controller;
-
-import com.springproject.orgschart.exceptions.EmployeeIdNotValidException;
 import com.springproject.orgschart.exceptions.EmployeeNotFoundException;
 import com.springproject.orgschart.dto.EmployeeDTO;
 import com.springproject.orgschart.dto.OrganizationChartDTO;

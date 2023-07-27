@@ -7,4 +7,6 @@ public interface LevelRepository extends JpaRepository<Level, Integer> {
     Level findByDesignation(String designation);
 
     boolean existsByDesignation(String designation);
+
+    Level findByLevelId(int levelId);
 }
